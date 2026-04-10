@@ -9,7 +9,7 @@ export async function GET () {
         })
     } catch (error) {
         return NextResponse.json({
-            message : "Database connection failed"
+            message : error || "Database connection failed"
         }, { status: 500 })
     }
 }
