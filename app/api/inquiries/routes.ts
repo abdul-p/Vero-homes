@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import Inquiry from "@/models/Inquiry";
-import Listing from "@/models/Listing";
+import Inquiry from "@/model/Inquiry";
+import Listing from "@/model/Listing";
 
 export async function POST(req: NextRequest) {
   try {
