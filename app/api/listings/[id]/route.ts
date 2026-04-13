@@ -7,12 +7,13 @@ import Listing from "@/model/Listing";
 // GET - fetch single listing (public)
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: Promise<{ params: { id: string } }>
 ) {
   try {
+    const { id } = await params;
     await connectDB();
 
-    const listing = await Listing.findById(params.id).populate(
+    const listing = await Listing.findById(id).populate(
       "agent",
       "name email phone avatar"
     );
