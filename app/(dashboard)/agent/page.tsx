@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import ImageUpload from "@/components/ImageUpload";
 
 interface Listing {
   _id: string;
@@ -50,6 +51,7 @@ export default function AgentDashboard() {
     address: "",
     bedrooms: "",
     bathrooms: "",
+    images: [] as string[],
   });
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState("");
@@ -120,6 +122,7 @@ export default function AgentDashboard() {
           },
           bedrooms: formData.bedrooms ? Number(formData.bedrooms) : undefined,
           bathrooms: formData.bathrooms ? Number(formData.bathrooms) : undefined,
+          images: formData.images,
         }),
       });
 
@@ -140,6 +143,7 @@ export default function AgentDashboard() {
         address: "",
         bedrooms: "",
         bathrooms: "",
+        images: []
       });
       fetchListings();
       setTimeout(() => setActiveTab("listings"), 1500);
@@ -476,6 +480,8 @@ export default function AgentDashboard() {
                   />
                 </div>
               </div>
+              <ImageUpload images={formData.images} onImagesChange={(imgs) => setFormData({ ...formData, images: imgs })}/>
+
 
               <button
                 type="submit"
