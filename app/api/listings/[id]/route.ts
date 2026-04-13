@@ -7,7 +7,7 @@ import Listing from "@/model/Listing";
 // GET - fetch single listing (public)
 export async function GET(
   req: NextRequest,
-  { params }: Promise<{ params: { id: string } }>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -37,7 +37,7 @@ export async function GET(
 // PATCH - update a listing (agent who owns it or admin)
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -93,7 +93,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
