@@ -1,41 +1,23 @@
 import Link from "next/link";
 
+import SearchBar from "@/components/SearchBar";
+
 export default function HomePage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-24 px-4">
+      <section className="bg-[url('/img/headbg.jpg')] bg-cover bg-center   py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Find Your Perfect Property in Nigeria
+          <h1 className="text-4xl text-lime-100 md:text-6xl font-bold mb-6 leading-tight">
+            WE BUILD THE FUTURE REAL ESTATE
           </h1>
-          <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+          <p className="text-lime-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
             Browse thousands of verified listings across Lagos, Abuja, and Port
             Harcourt. Buy, rent, or shortlet with confidence.
           </p>
 
           {/* Search Bar */}
-          <div className="bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 max-w-2xl mx-auto shadow-lg">
-            <select className="flex-1 px-4 py-3 text-gray-700 text-sm rounded-xl focus:outline-none">
-              <option value="">All Cities</option>
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Port Harcourt">Port Harcourt</option>
-            </select>
-            <select className="flex-1 px-4 py-3 text-gray-700 text-sm rounded-xl focus:outline-none">
-              <option value="">All Types</option>
-              <option value="sale">For Sale</option>
-              <option value="rent">For Rent</option>
-              <option value="shortlet">Short Let</option>
-              <option value="land">Land</option>
-            </select>
-            <Link
-              href="/listings"
-              className="bg-blue-600 text-white px-8 py-3 rounded-xl text-sm font-medium hover:bg-blue-700 transition text-center"
-            >
-              Search
-            </Link>
-          </div>
+          <SearchBar />
         </div>
       </section>
 
@@ -68,10 +50,34 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: "For Sale", type: "sale", emoji: "🏠", bg: "bg-blue-50", text: "text-blue-600" },
-              { label: "For Rent", type: "rent", emoji: "🔑", bg: "bg-green-50", text: "text-green-600" },
-              { label: "Short Let", type: "shortlet", emoji: "🛎️", bg: "bg-purple-50", text: "text-purple-600" },
-              { label: "Land", type: "land", emoji: "🌍", bg: "bg-orange-50", text: "text-orange-600" },
+              {
+                label: "For Sale",
+                type: "sale",
+                emoji: "🏠",
+                bg: "bg-blue-50",
+                text: "text-blue-600",
+              },
+              {
+                label: "For Rent",
+                type: "rent",
+                emoji: "🔑",
+                bg: "bg-green-50",
+                text: "text-green-600",
+              },
+              {
+                label: "Short Let",
+                type: "shortlet",
+                emoji: "🛎️",
+                bg: "bg-purple-50",
+                text: "text-purple-600",
+              },
+              {
+                label: "Land",
+                type: "land",
+                emoji: "🌍",
+                bg: "bg-orange-50",
+                text: "text-orange-600",
+              },
             ].map((item) => (
               <Link
                 key={item.type}
@@ -98,9 +104,21 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { city: "Lagos", description: "Nigeria's commercial capital", color: "from-blue-400 to-blue-600" },
-              { city: "Abuja", description: "The federal capital territory", color: "from-green-400 to-green-600" },
-              { city: "Port Harcourt", description: "The garden city", color: "from-purple-400 to-purple-600" },
+              {
+                city: "Lagos",
+                description: "Nigeria's commercial capital",
+                color: "from-blue-400 to-blue-600",
+              },
+              {
+                city: "Abuja",
+                description: "The federal capital territory",
+                color: "from-green-400 to-green-600",
+              },
+              {
+                city: "Port Harcourt",
+                description: "The garden city",
+                color: "from-purple-400 to-purple-600",
+              },
             ].map((item) => (
               <Link
                 key={item.city}

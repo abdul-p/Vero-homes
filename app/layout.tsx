@@ -24,9 +24,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (  
+  return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body
+        className={`bg-lime-100 ${geistSans.variable} ${geistMono.variable}`}
+      >
         <AuthSessionProvider>
           <Navbar />
           {children}

@@ -1,37 +1,30 @@
-
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 
+import Logo from "./logo";
+import NavLinks from "./Nav-links";
+
 export default function Navbar() {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <nav className="bg-transparent shadow-sm sticky top-0 z-50 h-12 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 h-full py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-blue-600">
-          Vero<span className="text-gray-800">Homes</span>
-        </Link>
-
+        <Logo />
+        <NavLinks />
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/listings" className="text-sm text-gray-600 hover:text-blue-600 transition">
-            Listings
-          </Link>
-          <Link href="/about" className="text-sm text-gray-600 hover:text-blue-600 transition">
-            About
-          </Link>
-
           {session ? (
             <>
               {session.user.role === "agent" && (
                 <Link
                   href="/agent"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition"
+                  className="text-sm text-gray-600 hover:text-lime-600 transition"
                 >
                   Dashboard
                 </Link>
@@ -39,14 +32,14 @@ export default function Navbar() {
               {session.user.role === "admin" && (
                 <Link
                   href="/admin"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition"
+                  className="text-sm text-gray-600 hover:text-lime-600 transition"
                 >
                   Admin
                 </Link>
               )}
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-sm text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                className="text-sm text-white bg-lime-600 px-4 py-2 rounded-lg hover:bg-lime-700 transition"
               >
                 Sign Out
               </button>
@@ -55,13 +48,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-sm text-gray-600 hover:text-blue-600 transition"
+                className="text-sm text-gray-600 hover:text-lime-600 transition"
               >
                 Sign In
               </Link>
               <Link
                 href="/register"
-                className="text-sm text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                className="text-sm text-white bg-lime-500 px-4 py-2 rounded-lg hover:bg-lime-600 transition"
               >
                 Get Started
               </Link>
@@ -101,7 +94,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t px-4 py-4 flex flex-col gap-4">
+        <div className="md:hidden bg-lime-100 border-t px-4 py-4 flex flex-col gap-4">
           <Link
             href="/listings"
             className="text-sm text-gray-600"
@@ -139,7 +132,7 @@ export default function Navbar() {
               )}
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-sm text-white bg-blue-600 px-4 py-2 rounded-lg"
+                className="text-sm text-white bg-lime-600 px-4 py-2 rounded-lg"
               >
                 Sign Out
               </button>
@@ -155,7 +148,7 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/register"
-                className="text-sm text-white bg-blue-600 px-4 py-2 rounded-lg text-center"
+                className="text-sm text-white bg-lime-500 px-4 py-2 rounded-lg text-center"
                 onClick={() => setMenuOpen(false)}
               >
                 Get Started
