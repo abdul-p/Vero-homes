@@ -1,11 +1,13 @@
 import Link from "next/link";
 
+import AnimatedText from "./AnimatedText";
+
 export default function SearchBar() {
   return (
     <div className="bg-white rounded-2xl p-6 max-w-5xl mx-auto shadow-xl space-y-6">
       <div className="text-center">
         <p className="text-xl font-semibold text-gray-900">
-          Find the best place for you
+          <AnimatedText text="Find the best place for you" />
         </p>
         {/* <h2 className="text-xl font-semibold text-gray-900">
           Search Properties

@@ -1,11 +1,12 @@
 import Link from "next/link";
 
 import SearchBar from "@/components/SearchBar";
+import StatsSection from "@/components/StatsSection";
+import MapSection from "@/components/MapSection";
 
 export default function HomePage() {
   return (
     <main>
-      {/* Hero Section */}
       <section className="bg-[url('/img/headbg.jpg')] bg-cover bg-center   py-24 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl text-lime-100 md:text-6xl font-bold mb-6 leading-tight">
@@ -21,7 +22,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      <StatsSection />
       <section className="bg-white py-12 px-4 border-b">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
@@ -38,7 +39,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Property Types Section */}
+      <MapSection />
+
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
@@ -92,7 +94,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Cities Section */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
