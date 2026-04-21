@@ -3,6 +3,7 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import StatsSection from "@/components/StatsSection";
 import MapSection from "@/components/MapSection";
+import PropertiesSection from "@/components/PropertiesView";
 
 export default function HomePage() {
   return (
@@ -23,7 +24,7 @@ export default function HomePage() {
       </section>
 
       <StatsSection />
-      <section className="bg-white py-12 px-4 border-b">
+      <section className="bg-lime-100 py-12 px-4 border-b">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { label: "Properties Listed", value: "2,400+" },
@@ -41,7 +42,7 @@ export default function HomePage() {
 
       <MapSection />
 
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-lime-100">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
             Browse by Type
@@ -94,7 +95,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-white">
+      <PropertiesSection />
+      <section className="py-16 px-4 bg-lime-100">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
             Top Cities
@@ -134,7 +136,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 px-4 bg-blue-600 text-white text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Are You a Property Agent?</h2>
@@ -152,7 +153,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-10 px-4 text-center text-sm">
+      <footer className="bg-lime-100 text-gray-400 py-10 px-4 text-center text-sm">
         <p className="text-white font-semibold text-lg mb-2">VeroHomes</p>
         <p>© {new Date().getFullYear()} Vero Homes. All rights reserved.</p>
         <p className="mt-2">Lagos · Abuja · Port Harcourt</p>
