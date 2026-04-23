@@ -1,13 +1,14 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Listing {
   _id: string;
   title: string;
   type: string;
+  category: string;
   price: number;
   location: {
     city: string;
@@ -25,26 +26,32 @@ interface Listing {
 export default function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    type: "",
-    city: "",
-    minPrice: "",
-    maxPrice: "",
-    bedrooms: "",
-  });
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (e.target.value) {
+      params.set(e.target.name, e.target.value);
+    } else {
+      params.delete(e.target.name);
+    }
+
+    router.push(`/listings?${params.toString()}`);
+  };
 
   const fetchListings = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (filters.type) params.append("type", filters.type);
-      if (filters.city) params.append("city", filters.city);
-      if (filters.minPrice) params.append("minPrice", filters.minPrice);
-      if (filters.maxPrice) params.append("maxPrice", filters.maxPrice);
-      if (filters.bedrooms) params.append("bedrooms", filters.bedrooms);
+      const params = new URLSearchParams(searchParams.toString());
 
       const res = await fetch(`/api/listings?${params.toString()}`);
       const data = await res.json();
+
       setListings(data.listings || []);
     } catch (error) {
       console.error("Failed to fetch listings:", error);
@@ -55,13 +62,7 @@ export default function ListingsPage() {
 
   useEffect(() => {
     fetchListings();
-  }, []);
-
-  const handleFilterChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-  };
+  }, [searchParams]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,8 +112,8 @@ export default function ListingsPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <select
               name="city"
-              value={filters.city}
-              onChange={handleFilterChange}
+              value={searchParams.get("city") || ""}
+              onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Cities</option>
@@ -123,8 +124,8 @@ export default function ListingsPage() {
 
             <select
               name="type"
-              value={filters.type}
-              onChange={handleFilterChange}
+              value={searchParams.get("type") || ""}
+              onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Types</option>
@@ -137,8 +138,8 @@ export default function ListingsPage() {
             <input
               type="number"
               name="minPrice"
-              value={filters.minPrice}
-              onChange={handleFilterChange}
+              value={searchParams.get("minPrice") || ""}
+              onChange={handleInputChange}
               placeholder="Min Price"
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -146,16 +147,16 @@ export default function ListingsPage() {
             <input
               type="number"
               name="maxPrice"
-              value={filters.maxPrice}
-              onChange={handleFilterChange}
+              value={searchParams.get("maxPrice") || ""}
+              onChange={handleInputChange}
               placeholder="Max Price"
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <select
               name="bedrooms"
-              value={filters.bedrooms}
-              onChange={handleFilterChange}
+              value={searchParams.get("bedrooms") || ""}
+              onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Any Bedrooms</option>
@@ -177,13 +178,6 @@ export default function ListingsPage() {
             <button
               type="button"
               onClick={() => {
-                setFilters({
-                  type: "",
-                  city: "",
-                  minPrice: "",
-                  maxPrice: "",
-                  bedrooms: "",
-                });
                 setTimeout(fetchListings, 0);
               }}
               className="border border-gray-200 text-gray-600 px-6 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
@@ -208,7 +202,8 @@ export default function ListingsPage() {
         ) : (
           <>
             <p className="text-sm text-gray-500 mb-4">
-              {listings.length} propert{listings.length === 1 ? "y" : "ies"} found
+              {listings.length} propert{listings.length === 1 ? "y" : "ies"}{" "}
+              found
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {listings.map((listing) => (
@@ -253,6 +248,10 @@ export default function ListingsPage() {
                     <p className="text-blue-600 font-bold text-lg">
                       {formatPrice(listing.price)}
                     </p>
+
+                    <span className="text-xs text-gray-500">
+                      {listing.category}
+                    </span>
 
                     {listing.bedrooms && (
                       <div className="flex gap-4 mt-2 text-xs text-gray-500">

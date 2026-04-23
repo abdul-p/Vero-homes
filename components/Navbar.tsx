@@ -16,9 +16,9 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 h-full py-4 flex items-center justify-between">
         {/* Logo */}
         <Logo />
-        <NavLinks />
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
+          <NavLinks setMenuOpen={setMenuOpen} />
           {session ? (
             <>
               {session.user.role === "agent" && (
@@ -95,21 +95,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-lime-100 border-t px-4 py-4 flex flex-col gap-4">
-          <Link
-            href="/listings"
-            className="text-sm text-gray-600"
-            onClick={() => setMenuOpen(false)}
-          >
-            Listings
-          </Link>
-          <Link
-            href="/about"
-            className="text-sm text-gray-600"
-            onClick={() => setMenuOpen(false)}
-          >
-            About
-          </Link>
-
+          <NavLinks setMenuOpen={setMenuOpen} />
           {session ? (
             <>
               {session.user.role === "agent" && (

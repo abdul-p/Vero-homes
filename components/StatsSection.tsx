@@ -30,7 +30,6 @@ export default function StatsSection() {
             </div>
           </div>
         </div>
-
         <div className="space-y-6">
           <div className="relative w-full h-[250px] rounded-2xl overflow-hidden">
             <Image
@@ -54,43 +53,41 @@ export default function StatsSection() {
               Details
             </button>
           </div>
-
-          <div className="bg-surface rounded-2xl p-4 space-y-4 shadow-card transition hover:shadow-soft">
-            <div className="relative w-full h-[180px] rounded-xl overflow-hidden">
-              <Image
-                src="/img/stats-1.jpg"
-                alt="City property"
-                fill
-                sizes="(max-width: 768px) 100vw, 400px"
-                className="object-cover transition duration-500 hover:scale-105"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-gray-900">From $256k</p>
-
-              <span className="text-xs text-gray-500">Modern Homes</span>
-            </div>
-
-            <button className="w-full bg-lime-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-lime-700 transition">
-              Explore Properties
-            </button>
+        </div>
+        <div className="bg-surface space-y-4 rounded-2xl  p-4 shadow-card    transition hover:shadow-soft">
+          <div className="relative w-full h-[180px] rounded-xl overflow-hidden">
+            <Image
+              src="/img/stats-1.jpg"
+              alt="City property"
+              fill
+              sizes="(max-width: 768px) 100vw, 400px"
+              className="object-cover transition duration-500 hover:scale-105"
+            />
           </div>
 
-          <div className="flex items-center justify-between gap-6 text-sm text-text-muted mt-6">
-            <p className="flex-1 leading-relaxed">
-              Whether it's creating a cozy corner for relaxation or transforming
-              a small area into a workspace.
-            </p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-gray-900">From $256k</p>
 
-            <div className="flex gap-2">
-              <button className="p-2.5 rounded-full border border-border hover:bg-gray-100 transition">
-                ←
-              </button>
-              <button className="p-2.5 rounded-full border border-border hover:bg-gray-100 transition">
-                →
-              </button>
-            </div>
+            <span className="text-xs text-gray-500">Modern Homes</span>
+          </div>
+
+          <button className="w-full bg-lime-600 text-white py-2.5 rounded-xl text-sm font-medium hover:bg-lime-700 transition">
+            Explore Properties
+          </button>
+        </div>
+        <div className="flex items-center justify-between gap-6 text-sm text-text-muted mt-6">
+          <p className="flex-1 leading-relaxed">
+            Whether it's creating a cozy corner for relaxation or transforming a
+            small area into a workspace.
+          </p>
+
+          <div className="flex gap-2">
+            <button className="p-2.5 rounded-full border border-border hover:bg-gray-100 transition">
+              ←
+            </button>
+            <button className="p-2.5 rounded-full border border-border hover:bg-gray-100 transition">
+              →
+            </button>
           </div>
         </div>
       </div>

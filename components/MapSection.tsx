@@ -2,7 +2,7 @@
 
 export default function MapSection() {
   return (
-    <section className="py-20 px-4 bg-background">
+    <section className="py-20 px-4 bg-lime-200">
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-start">
         <div className="w-full h-[400px] lg:h-[500px] rounded-2xl bg-gray-200 flex items-center justify-center text-gray-500">
           Map will go here

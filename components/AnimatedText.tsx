@@ -13,7 +13,7 @@ export default function AnimatedText({ text, className }: Props) {
       {words.map((word, index) => (
         <span
           key={index}
-          className="inline-block opacity-0 animate-fade-up"
+          className="inline-block opacity-100 animate-fade-up"
           style={{
             animationDelay: `${index * 0.15}s`,
           }}

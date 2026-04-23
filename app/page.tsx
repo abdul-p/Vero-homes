@@ -4,6 +4,10 @@ import SearchBar from "@/components/SearchBar";
 import StatsSection from "@/components/StatsSection";
 import MapSection from "@/components/MapSection";
 import PropertiesSection from "@/components/PropertiesView";
+import CategoriesSection from "@/components/CategoriesSection";
+import MarketStats from "@/components/Market-stats";
+import Agents from "@/components/Agents";
+import { ConciergeBell, Earth, House, Key } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -18,13 +22,11 @@ export default function HomePage() {
             Harcourt. Buy, rent, or shortlet with confidence.
           </p>
 
-          {/* Search Bar */}
           <SearchBar />
         </div>
       </section>
-
       <StatsSection />
-      <section className="bg-lime-100 py-12 px-4 border-b">
+      <section className="py-12 px-4 bg-gradient-to-br from-lime-400 to-lime-900">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
             { label: "Properties Listed", value: "2,400+" },
@@ -33,16 +35,14 @@ export default function HomePage() {
             { label: "Happy Clients", value: "1,200+" },
           ].map((stat) => (
             <div key={stat.label}>
-              <p className="text-3xl font-bold text-blue-600">{stat.value}</p>
-              <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
+              <p className="text-3xl font-bold text-lime-100">{stat.value}</p>
+              <p className="text-sm text-lime-100 mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
       </section>
-
       <MapSection />
-
-      <section className="py-16 px-4 bg-lime-100">
+      <section className="py-16 px-4 bg-gradient-to-br from-lime-200 to-lime-700 ">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
             Browse by Type
@@ -56,52 +56,56 @@ export default function HomePage() {
               {
                 label: "For Sale",
                 type: "sale",
-                emoji: "🏠",
+                icon: House,
                 bg: "bg-blue-50",
                 text: "text-blue-600",
               },
               {
                 label: "For Rent",
                 type: "rent",
-                emoji: "🔑",
+                icon: Key,
                 bg: "bg-green-50",
                 text: "text-green-600",
               },
               {
                 label: "Short Let",
                 type: "shortlet",
-                emoji: "🛎️",
+                icon: ConciergeBell,
                 bg: "bg-purple-50",
                 text: "text-purple-600",
               },
               {
                 label: "Land",
                 type: "land",
-                emoji: "🌍",
+                icon: Earth,
                 bg: "bg-orange-50",
                 text: "text-orange-600",
               },
-            ].map((item) => (
-              <Link
-                key={item.type}
-                href={`/listings?type=${item.type}`}
-                className={`${item.bg} rounded-2xl p-6 text-center hover:shadow-md transition`}
-              >
-                <p className="text-4xl mb-3">{item.emoji}</p>
-                <p className={`font-semibold ${item.text}`}>{item.label}</p>
-              </Link>
-            ))}
+            ].map((item) => {
+              const Icon: React.FC<{ className?: string; size?: number }> =
+                item.icon;
+              return (
+                <Link
+                  key={item.type}
+                  href={`/listings?type=${item.type}`}
+                  className={`${item.bg} rounded-2xl p-6 text-center hover:shadow-md transition`}
+                >
+                  <Icon className={`mx-auto mb-3 ${item.text}`} size={32} />
+                  <p className={`font-semibold ${item.text}`}>{item.label}</p>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
-
       <PropertiesSection />
-      <section className="py-16 px-4 bg-lime-100">
+      <CategoriesSection />
+      <section className="py-16 px-4 bg-lime-800">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-2">
+          <h2 className="text-3xl font-bold text-gray-100 text-center mb-2">
             Top Cities
           </h2>
-          <p className="text-gray-500 text-center mb-10">
+          <p className="text-gray-200 text-center mb-10">
             Explore properties in Nigeria's major cities
           </p>
 
@@ -110,17 +114,17 @@ export default function HomePage() {
               {
                 city: "Lagos",
                 description: "Nigeria's commercial capital",
-                color: "from-blue-400 to-blue-600",
+                color: "from-lime-500 to-blue-600",
               },
               {
                 city: "Abuja",
                 description: "The federal capital territory",
-                color: "from-green-400 to-green-600",
+                color: "from-lime-600 to-green-600",
               },
               {
                 city: "Port Harcourt",
                 description: "The garden city",
-                color: "from-purple-400 to-purple-600",
+                color: "from-lime-800 to-purple-600",
               },
             ].map((item) => (
               <Link
@@ -135,8 +139,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <section className="py-20 px-4 bg-blue-600 text-white text-center">
+      <MarketStats />
+      <Agents />
+      <section className="py-20 px-4 bg-lime-900 text-white text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold mb-4">Are You a Property Agent?</h2>
           <p className="text-blue-100 mb-8">
@@ -151,10 +156,9 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
       {/* Footer */}
-      <footer className="bg-lime-100 text-gray-400 py-10 px-4 text-center text-sm">
-        <p className="text-white font-semibold text-lg mb-2">VeroHomes</p>
+      <footer className="bg-lime-100 text-gray-700 py-10 px-4 text-center text-sm">
+        <p className="text-black font-semibold text-lg mb-2">VeroHomes</p>
         <p>© {new Date().getFullYear()} Vero Homes. All rights reserved.</p>
         <p className="mt-2">Lagos · Abuja · Port Harcourt</p>
       </footer>

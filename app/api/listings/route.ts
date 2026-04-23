@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
     const bedrooms = searchParams.get("bedrooms");
+    const category = searchParams.get("category");
 
     const query: any = { status: "approved" };
 
@@ -25,6 +26,7 @@ export async function GET(req: NextRequest) {
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
     if (bedrooms) query.bedrooms = Number(bedrooms);
+    if (category) query.category = category;
 
     const listings = await Listing.find(query)
       .populate("agent", "name email phone avatar")
@@ -34,11 +36,10 @@ export async function GET(req: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { message: error.message || "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
 
 export async function POST(req: NextRequest) {
   try {
@@ -47,14 +48,14 @@ export async function POST(req: NextRequest) {
     if (!session) {
       return NextResponse.json(
         { message: "You must be logged in" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     if (session.user.role !== "agent" && session.user.role !== "admin") {
       return NextResponse.json(
         { message: "Only agents can create listings" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
       type,
       price,
       location,
+      category,
       bedrooms,
       bathrooms,
       images,
@@ -73,7 +75,7 @@ export async function POST(req: NextRequest) {
     if (!title || !description || !type || !price || !location) {
       return NextResponse.json(
         { message: "Please fill in all required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -87,6 +89,7 @@ export async function POST(req: NextRequest) {
       location,
       bedrooms,
       bathrooms,
+      category,
       images: images || [],
       agent: session.user.id,
       status: "pending",
@@ -94,12 +97,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { message: "Listing created successfully", listing },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: any) {
     return NextResponse.json(
       { message: error.message || "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

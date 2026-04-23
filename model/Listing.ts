@@ -1,26 +1,26 @@
-import mongoose, {Schema, Document, Model} from "mongoose";
-
+import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IListing extends Document {
-    title: string;
-    description: string;
-    type: "sale" | "rent" | "shortlet" | "land";
-    price : number;
-    location : {
-        city: string;
-        address: string;
-        coordinates: {
-            lat : number ;
-            lng: number ;
-        };
+  title: string;
+  description: string;
+  type: "sale" | "rent" | "shortlet" | "land";
+  category: string;
+  price: number;
+  location: {
+    city: string;
+    address: string;
+    coordinates: {
+      lat: number;
+      lng: number;
     };
-    bedrooms?: number;
-    bathrooms?: number;
-    images: string[];
-    agent: mongoose.Types.ObjectId;
-    status: "pending" | "approved" | "rejected";
-    createdAt: Date;
-    updatedAt: Date;
+  };
+  bedrooms?: number;
+  bathrooms?: number;
+  images: string[];
+  agent: mongoose.Types.ObjectId;
+  status: "pending" | "approved" | "rejected";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const ListingSchema = new Schema<IListing>(
@@ -38,6 +38,11 @@ const ListingSchema = new Schema<IListing>(
       type: String,
       enum: ["sale", "rent", "shortlet", "land"],
       required: [true, "Listing type is required"],
+    },
+    category: {
+      type: String,
+      enum: ["apartment", "villa", "studio", "penthouse", "land"],
+      required: [true, "Property category is required"],
     },
     price: {
       type: Number,
@@ -79,11 +84,10 @@ const ListingSchema = new Schema<IListing>(
       default: "pending",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const Listing: Model<IListing> =
-  mongoose.models.Listing ||
-  mongoose.model<IListing>("Listing", ListingSchema);
+  mongoose.models.Listing || mongoose.model<IListing>("Listing", ListingSchema);
 
 export default Listing;
