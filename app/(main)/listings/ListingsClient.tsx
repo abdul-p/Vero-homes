@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
+type PageProps = {
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
 interface Listing {
   _id: string;
   title: string;
@@ -23,17 +27,31 @@ interface Listing {
   };
 }
 
-export default function ListingsPage() {
+export default function ListingsPage({ searchParams }: PageProps) {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const searchParams = useSearchParams();
+  const getParam = (
+    searchParams: Record<string, string | string[] | undefined>,
+    key: string,
+  ) => {
+    const value = searchParams[key];
+    return Array.isArray(value) ? value[0] : value || "";
+  };
   const router = useRouter();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(
+      Object.entries(searchParams).reduce(
+        (acc, [key, value]) => {
+          if (typeof value === "string") acc[key] = value;
+          return acc;
+        },
+        {} as Record<string, string>,
+      ),
+    );
 
     if (e.target.value) {
       params.set(e.target.name, e.target.value);
@@ -47,7 +65,15 @@ export default function ListingsPage() {
   const fetchListings = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(
+        Object.entries(searchParams).reduce(
+          (acc, [key, value]) => {
+            if (typeof value === "string") acc[key] = value;
+            return acc;
+          },
+          {} as Record<string, string>,
+        ),
+      );
 
       const res = await fetch(`/api/listings?${params.toString()}`);
       const data = await res.json();
@@ -112,7 +138,7 @@ export default function ListingsPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <select
               name="city"
-              value={searchParams.get("city") || ""}
+              value={getParam(searchParams, "city")}
               onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -124,7 +150,7 @@ export default function ListingsPage() {
 
             <select
               name="type"
-              value={searchParams.get("type") || ""}
+              value={getParam(searchParams, "type")}
               onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -138,7 +164,7 @@ export default function ListingsPage() {
             <input
               type="number"
               name="minPrice"
-              value={searchParams.get("minPrice") || ""}
+              value={getParam(searchParams, "minPrice")}
               onChange={handleInputChange}
               placeholder="Min Price"
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -147,7 +173,7 @@ export default function ListingsPage() {
             <input
               type="number"
               name="maxPrice"
-              value={searchParams.get("maxPrice") || ""}
+              value={getParam(searchParams, "maxPrice")}
               onChange={handleInputChange}
               placeholder="Max Price"
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -155,7 +181,7 @@ export default function ListingsPage() {
 
             <select
               name="bedrooms"
-              value={searchParams.get("bedrooms") || ""}
+              value={getParam(searchParams, "bedrooms")}
               onChange={handleInputChange}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
