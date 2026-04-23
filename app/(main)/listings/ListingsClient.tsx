@@ -4,10 +4,6 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
-type PageProps = {
-  searchParams: Record<string, string | string[] | undefined>;
-};
-
 interface Listing {
   _id: string;
   title: string;
@@ -27,55 +23,22 @@ interface Listing {
   };
 }
 
-export default function ListingsPage({ searchParams }: PageProps) {
+export default function ListingsClient() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const getParam = (
-    searchParams: Record<string, string | string[] | undefined>,
-    key: string,
-  ) => {
-    const value = searchParams[key];
-    return Array.isArray(value) ? value[0] : value || "";
-  };
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const params = new URLSearchParams(
-      Object.entries(searchParams).reduce(
-        (acc, [key, value]) => {
-          if (typeof value === "string") acc[key] = value;
-          return acc;
-        },
-        {} as Record<string, string>,
-      ),
-    );
+  // Convert URL params → API query
+  const buildQuery = () => searchParams.toString();
 
-    if (e.target.value) {
-      params.set(e.target.name, e.target.value);
-    } else {
-      params.delete(e.target.name);
-    }
-
-    router.push(`/listings?${params.toString()}`);
-  };
-
+  // Fetch listings
   const fetchListings = async () => {
     setLoading(true);
-    try {
-      const params = new URLSearchParams(
-        Object.entries(searchParams).reduce(
-          (acc, [key, value]) => {
-            if (typeof value === "string") acc[key] = value;
-            return acc;
-          },
-          {} as Record<string, string>,
-        ),
-      );
 
-      const res = await fetch(`/api/listings?${params.toString()}`);
+    try {
+      const res = await fetch(`/api/listings?${buildQuery()}`);
       const data = await res.json();
 
       setListings(data.listings || []);
@@ -86,22 +49,37 @@ export default function ListingsPage({ searchParams }: PageProps) {
     }
   };
 
+  // Fetch whenever URL changes
   useEffect(() => {
     fetchListings();
-  }, [searchParams]);
+  }, [searchParams.toString()]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchListings();
+  // Handle filter change
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (e.target.value) {
+      params.set(e.target.name, e.target.value);
+    } else {
+      params.delete(e.target.name);
+    }
+
+    router.push(`/listings?${params.toString()}`);
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-NG", {
+  // Clear filters
+  const handleClear = () => {
+    router.push("/listings");
+  };
+
+  const formatPrice = (price: number) =>
+    new Intl.NumberFormat("en-NG", {
       style: "currency",
       currency: "NGN",
       maximumFractionDigits: 0,
     }).format(price);
-  };
 
   const typeLabel: Record<string, string> = {
     sale: "For Sale",
@@ -132,15 +110,15 @@ export default function ListingsPage({ searchParams }: PageProps) {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Filters */}
         <form
-          onSubmit={handleSearch}
+          onSubmit={(e) => e.preventDefault()}
           className="bg-white rounded-2xl p-6 shadow-sm mb-8"
         >
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <select
               name="city"
-              value={getParam(searchParams, "city")}
+              value={searchParams.get("city") || ""}
               onChange={handleInputChange}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-lg px-3 py-2 text-sm"
             >
               <option value="">All Cities</option>
               <option value="Lagos">Lagos</option>
@@ -150,9 +128,9 @@ export default function ListingsPage({ searchParams }: PageProps) {
 
             <select
               name="type"
-              value={getParam(searchParams, "type")}
+              value={searchParams.get("type") || ""}
               onChange={handleInputChange}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-lg px-3 py-2 text-sm"
             >
               <option value="">All Types</option>
               <option value="sale">For Sale</option>
@@ -164,49 +142,45 @@ export default function ListingsPage({ searchParams }: PageProps) {
             <input
               type="number"
               name="minPrice"
-              value={getParam(searchParams, "minPrice")}
+              value={searchParams.get("minPrice") || ""}
               onChange={handleInputChange}
               placeholder="Min Price"
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-lg px-3 py-2 text-sm"
             />
 
             <input
               type="number"
               name="maxPrice"
-              value={getParam(searchParams, "maxPrice")}
+              value={searchParams.get("maxPrice") || ""}
               onChange={handleInputChange}
               placeholder="Max Price"
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-lg px-3 py-2 text-sm"
             />
 
             <select
               name="bedrooms"
-              value={getParam(searchParams, "bedrooms")}
+              value={searchParams.get("bedrooms") || ""}
               onChange={handleInputChange}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border rounded-lg px-3 py-2 text-sm"
             >
               <option value="">Any Bedrooms</option>
-              <option value="1">1 Bedroom</option>
-              <option value="2">2 Bedrooms</option>
-              <option value="3">3 Bedrooms</option>
-              <option value="4">4 Bedrooms</option>
-              <option value="5">5+ Bedrooms</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5+</option>
             </select>
           </div>
 
           <div className="mt-4 flex gap-3">
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
-            >
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm">
               Search
             </button>
+
             <button
               type="button"
-              onClick={() => {
-                setTimeout(fetchListings, 0);
-              }}
-              className="border border-gray-200 text-gray-600 px-6 py-2 rounded-lg text-sm hover:bg-gray-50 transition"
+              onClick={handleClear}
+              className="border px-6 py-2 rounded-lg text-sm"
             >
               Clear
             </button>
@@ -215,87 +189,51 @@ export default function ListingsPage({ searchParams }: PageProps) {
 
         {/* Results */}
         {loading ? (
-          <div className="text-center py-20 text-gray-400">
-            Loading listings...
-          </div>
+          <div className="text-center py-20">Loading...</div>
         ) : listings.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">No listings found</p>
-            <p className="text-gray-400 text-sm mt-2">
-              Try adjusting your filters
-            </p>
-          </div>
+          <div className="text-center py-20">No listings found</div>
         ) : (
-          <>
-            <p className="text-sm text-gray-500 mb-4">
-              {listings.length} propert{listings.length === 1 ? "y" : "ies"}{" "}
-              found
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {listings.map((listing) => (
-                <Link
-                  key={listing._id}
-                  href={`/listings/${listing._id}`}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition"
-                >
-                  {/* Image */}
-                  <div className="bg-gray-100 h-48 flex items-center justify-center">
-                    {listing.images.length > 0 ? (
-                      <img
-                        src={listing.images[0]}
-                        alt={listing.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <p className="text-gray-400 text-sm">No image</p>
-                    )}
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {listings.map((listing) => (
+              <Link
+                key={listing._id}
+                href={`/listings/${listing._id}`}
+                className="bg-white rounded-xl overflow-hidden shadow"
+              >
+                <div className="h-48 bg-gray-100">
+                  {listing.images[0] && (
+                    <img
+                      src={listing.images[0]}
+                      className="w-full h-full object-cover"
+                      alt={listing.title}
+                    />
+                  )}
+                </div>
 
-                  {/* Details */}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span
-                        className={`text-xs font-medium px-2 py-1 rounded-full ${typeBadge[listing.type]}`}
-                      >
-                        {typeLabel[listing.type]}
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        {listing.location.city}
-                      </span>
-                    </div>
-
-                    <h3 className="font-semibold text-gray-800 mb-1 line-clamp-1">
-                      {listing.title}
-                    </h3>
-                    <p className="text-xs text-gray-400 mb-3 line-clamp-1">
-                      {listing.location.address}
-                    </p>
-
-                    <p className="text-blue-600 font-bold text-lg">
-                      {formatPrice(listing.price)}
-                    </p>
-
-                    <span className="text-xs text-gray-500">
-                      {listing.category}
+                <div className="p-4">
+                  <div className="flex justify-between">
+                    <span
+                      className={`text-xs px-2 py-1 rounded ${typeBadge[listing.type]}`}
+                    >
+                      {typeLabel[listing.type]}
                     </span>
-
-                    {listing.bedrooms && (
-                      <div className="flex gap-4 mt-2 text-xs text-gray-500">
-                        <span>{listing.bedrooms} bed</span>
-                        {listing.bathrooms && (
-                          <span>{listing.bathrooms} bath</span>
-                        )}
-                      </div>
-                    )}
-
-                    <p className="text-xs text-gray-400 mt-3">
-                      Agent: {listing.agent.name}
-                    </p>
+                    <span className="text-xs text-gray-400">
+                      {listing.location.city}
+                    </span>
                   </div>
-                </Link>
-              ))}
-            </div>
-          </>
+
+                  <h3 className="font-semibold mt-2">{listing.title}</h3>
+                  <p className="text-sm text-gray-500">
+                    {listing.location.address}
+                  </p>
+
+                  <p className="text-blue-600 font-bold mt-2">
+                    {formatPrice(listing.price)}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         )}
       </div>
     </main>
