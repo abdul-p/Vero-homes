@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import SearchBar from "@/components/SearchBar";
 import StatsSection from "@/components/StatsSection";
@@ -7,6 +8,7 @@ import PropertiesSection from "@/components/PropertiesView";
 import CategoriesSection from "@/components/CategoriesSection";
 import MarketStats from "@/components/Market-stats";
 import Agents from "@/components/Agents";
+import Footer from "@/components/Footer";
 import { ConciergeBell, Earth, House, Key } from "lucide-react";
 
 export default function HomePage() {
@@ -99,7 +101,9 @@ export default function HomePage() {
         </div>
       </section>
       <PropertiesSection />
-      <CategoriesSection />
+      <Suspense fallback={<div className="py-20 text-center">Loading...</div>}>
+        <CategoriesSection />
+      </Suspense>
       <section className="py-16 px-4 bg-lime-800">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-100 text-center mb-2">
@@ -156,12 +160,7 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-      {/* Footer */}
-      <footer className="bg-lime-100 text-gray-700 py-10 px-4 text-center text-sm">
-        <p className="text-black font-semibold text-lg mb-2">VeroHomes</p>
-        <p>© {new Date().getFullYear()} Vero Homes. All rights reserved.</p>
-        <p className="mt-2">Lagos · Abuja · Port Harcourt</p>
-      </footer>
+      <Footer />
     </main>
   );
 }
