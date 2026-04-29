@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import PropertyMap from "@/components/PropertyMap";
+import type { MapPoint } from "@/components/map-utils";
 
 interface Listing {
   _id: string;
@@ -115,6 +117,17 @@ export default function ListingPage() {
     shortlet: "bg-purple-100 text-purple-700",
     land: "bg-orange-100 text-orange-700",
   };
+
+  const mapPoint: MapPoint | null = listing
+    ? {
+        id: listing._id,
+        title: listing.title,
+        price: listing.price,
+        city: listing.location.city,
+        address: listing.location.address,
+        coordinates: listing.location.coordinates,
+      }
+    : null;
 
   if (loading) {
     return (
@@ -233,6 +246,23 @@ export default function ListingPage() {
                 </p>
               </div>
             </div>
+
+            {mapPoint && (
+              <div className="bg-white rounded-2xl p-4 shadow-sm">
+                <div className="mb-4">
+                  <h2 className="font-semibold text-gray-800">Location</h2>
+                  <p className="text-sm text-gray-500">
+                    {listing.location.address}, {listing.location.city}
+                  </p>
+                </div>
+                <PropertyMap
+                  points={[mapPoint]}
+                  selectedId={listing._id}
+                  className="h-[360px]"
+                  zoom={12}
+                />
+              </div>
+            )}
           </div>
 
           {/* Right Column */}

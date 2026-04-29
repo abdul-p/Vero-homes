@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import PropertyMap from "@/components/PropertyMap";
+import type { MapPoint } from "@/components/map-utils";
 
 interface Listing {
   _id: string;
@@ -13,6 +15,10 @@ interface Listing {
   location: {
     city: string;
     address: string;
+    coordinates?: {
+      lat?: number;
+      lng?: number;
+    };
   };
   bedrooms?: number;
   bathrooms?: number;
@@ -94,6 +100,16 @@ export default function ListingsClient() {
     shortlet: "bg-purple-100 text-purple-700",
     land: "bg-orange-100 text-orange-700",
   };
+
+  const mapPoints: MapPoint[] = listings.map((listing) => ({
+    id: listing._id,
+    title: listing.title,
+    price: listing.price,
+    href: `/listings/${listing._id}`,
+    city: listing.location.city,
+    address: listing.location.address,
+    coordinates: listing.location.coordinates,
+  }));
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -193,46 +209,55 @@ export default function ListingsClient() {
         ) : listings.length === 0 ? (
           <div className="text-center py-20">No listings found</div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-6">
-            {listings.map((listing) => (
-              <Link
-                key={listing._id}
-                href={`/listings/${listing._id}`}
-                className="bg-white rounded-xl overflow-hidden shadow"
-              >
-                <div className="h-48 bg-gray-100">
-                  {listing.images[0] && (
-                    <img
-                      src={listing.images[0]}
-                      className="w-full h-full object-cover"
-                      alt={listing.title}
-                    />
-                  )}
-                </div>
-
-                <div className="p-4">
-                  <div className="flex justify-between">
-                    <span
-                      className={`text-xs px-2 py-1 rounded ${typeBadge[listing.type]}`}
-                    >
-                      {typeLabel[listing.type]}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {listing.location.city}
-                    </span>
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+            <div className="grid md:grid-cols-2 gap-6">
+              {listings.map((listing) => (
+                <Link
+                  key={listing._id}
+                  href={`/listings/${listing._id}`}
+                  className="bg-white rounded-xl overflow-hidden shadow"
+                >
+                  <div className="h-48 bg-gray-100">
+                    {listing.images[0] && (
+                      <img
+                        src={listing.images[0]}
+                        className="w-full h-full object-cover"
+                        alt={listing.title}
+                      />
+                    )}
                   </div>
 
-                  <h3 className="font-semibold mt-2">{listing.title}</h3>
-                  <p className="text-sm text-gray-500">
-                    {listing.location.address}
-                  </p>
+                  <div className="p-4">
+                    <div className="flex justify-between">
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${typeBadge[listing.type]}`}
+                      >
+                        {typeLabel[listing.type]}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {listing.location.city}
+                      </span>
+                    </div>
 
-                  <p className="text-blue-600 font-bold mt-2">
-                    {formatPrice(listing.price)}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                    <h3 className="font-semibold mt-2">{listing.title}</h3>
+                    <p className="text-sm text-gray-500">
+                      {listing.location.address}
+                    </p>
+
+                    <p className="text-blue-600 font-bold mt-2">
+                      {formatPrice(listing.price)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
+              <PropertyMap
+                points={mapPoints}
+                className="h-[420px] shadow lg:h-full"
+              />
+            </aside>
           </div>
         )}
       </div>

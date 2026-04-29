@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
     const bedrooms = searchParams.get("bedrooms");
+    const bathrooms = searchParams.get("bathrooms");
     const category = searchParams.get("category");
 
     const query: any = { status: "approved" };
@@ -26,6 +27,7 @@ export async function GET(req: NextRequest) {
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
     if (bedrooms) query.bedrooms = Number(bedrooms);
+    if (bathrooms) query.bathrooms = Number(bathrooms);
     if (category) query.category = category;
 
     const listings = await Listing.find(query)
