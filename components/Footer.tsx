@@ -29,7 +29,7 @@ export default function Footer() {
     }
   };
   return (
-    <footer className="bg-lime-900 text-gray-300 mt-20">
+    <footer className="bg-lime-900 text-gray-300">
       <div className="max-w-7xl mx-auto border-b border-gray-800 px-6 py-16 grid md:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
@@ -98,13 +98,24 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/buy" className="hover:text-white transition">
+              <Link
+                href="/listings?type=sale"
+                className="hover:text-white transition"
+              >
                 Buy Property
               </Link>
             </li>
             <li>
-              <Link href="/rent" className="hover:text-white transition">
+              <Link
+                href="/listings?type=rent"
+                className="hover:text-white transition"
+              >
                 Rent Property
+              </Link>
+            </li>
+            <li>
+              <Link href="/agents" className="hover:text-white transition">
+                Agents
               </Link>
             </li>
             <li>
@@ -162,42 +173,62 @@ export default function Footer() {
           </ul>
 
           <div className="flex gap-4 mt-4">
-            <span className="hover:text-white cursor-pointer">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-white/10 p-2 transition hover:bg-lime-600"
+              aria-label="Facebook"
+            >
               <Image
-                className="hover:text-lime-500 cursor-pointer"
                 src="/facebook.svg"
                 alt="Facebook"
-                width={24}
-                height={24}
+                width={20}
+                height={20}
               />
-            </span>
-            <span className="hover:text-white cursor-pointer">
+            </a>
+            <a
+              href="https://www.instagram.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-white/10 p-2 transition hover:bg-lime-600"
+              aria-label="Instagram"
+            >
               <Image
-                className="hover:text-lime-500 cursor-pointer"
                 src="/instagram.svg"
                 alt="Instagram"
-                width={24}
-                height={24}
+                width={20}
+                height={20}
               />
-            </span>
-            <span className="hover:text-white cursor-pointer">
+            </a>
+            <a
+              href="https://x.com"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-white/10 p-2 transition hover:bg-lime-600"
+              aria-label="X"
+            >
               <Image
-                className="hover:text-lime-500 cursor-pointer"
                 src="/x.svg"
-                alt="Twitter"
-                width={24}
-                height={24}
+                alt="X"
+                width={20}
+                height={20}
               />
-            </span>
-            <span className="hover:text-white cursor-pointer">
+            </a>
+            <a
+              href="https://wa.me/2348000000000"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-white/10 p-2 transition hover:bg-lime-600"
+              aria-label="WhatsApp"
+            >
               <Image
-                className="hover:text-lime-500 cursor-pointer"
                 src="/whatsapp.svg"
                 alt="WhatsApp"
-                width={24}
-                height={24}
+                width={20}
+                height={20}
               />
-            </span>
+            </a>
           </div>
         </div>
       </div>

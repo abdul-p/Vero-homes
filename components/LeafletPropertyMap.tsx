@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import {
-  CircleMarker,
   MapContainer,
+  Marker,
   Popup,
   TileLayer,
   useMap,
 } from "react-leaflet";
-import type { LatLngBoundsExpression } from "leaflet";
+import { divIcon, type LatLngBoundsExpression } from "leaflet";
 import { useEffect, useMemo } from "react";
 
 import {
@@ -24,6 +24,47 @@ type LeafletPropertyMapProps = {
   className?: string;
   zoom?: number;
 };
+
+function offsetDuplicatePositions(
+  items: { point: MapPoint; position: [number, number] }[],
+) {
+  const counts = new Map<string, number>();
+
+  return items.map((item) => {
+    const key = item.position.join(",");
+    const count = counts.get(key) || 0;
+    counts.set(key, count + 1);
+
+    if (count === 0) return item;
+
+    const angle = count * 0.85;
+    const distance = 0.008 + count * 0.0015;
+
+    return {
+      ...item,
+      position: [
+        item.position[0] + Math.sin(angle) * distance,
+        item.position[1] + Math.cos(angle) * distance,
+      ] as [number, number],
+    };
+  });
+}
+
+const defaultIcon = divIcon({
+  className: "",
+  html: `<span class="property-map-marker property-map-marker-default"></span>`,
+  iconSize: [30, 38],
+  iconAnchor: [15, 38],
+  popupAnchor: [0, -34],
+});
+
+const selectedIcon = divIcon({
+  className: "",
+  html: `<span class="property-map-marker property-map-marker-selected"></span>`,
+  iconSize: [34, 42],
+  iconAnchor: [17, 42],
+  popupAnchor: [0, -38],
+});
 
 function FitMapToPoints({ points }: { points: MapPoint[] }) {
   const map = useMap();
@@ -58,12 +99,18 @@ export default function LeafletPropertyMap({
   className = "",
   zoom = 6,
 }: LeafletPropertyMapProps) {
-  const positionedPoints = points
-    .map((point) => ({ point, position: getPointPosition(point) }))
-    .filter(
-      (item): item is { point: MapPoint; position: [number, number] } =>
-        item.position !== null,
-    );
+  const positionedPoints = useMemo(
+    () =>
+      offsetDuplicatePositions(
+        points
+          .map((point) => ({ point, position: getPointPosition(point) }))
+          .filter(
+            (item): item is { point: MapPoint; position: [number, number] } =>
+              item.position !== null,
+          ),
+      ),
+    [points],
+  );
 
   return (
     <div className={`overflow-hidden rounded-2xl ${className}`}>
@@ -83,16 +130,10 @@ export default function LeafletPropertyMap({
           const isSelected = selectedId === point.id;
 
           return (
-            <CircleMarker
+            <Marker
               key={point.id}
-              center={position}
-              radius={isSelected ? 11 : 8}
-              pathOptions={{
-                color: isSelected ? "#1d4ed8" : "#3f6212",
-                fillColor: isSelected ? "#2563eb" : "#65a30d",
-                fillOpacity: 0.9,
-                weight: 3,
-              }}
+              position={position}
+              icon={isSelected ? selectedIcon : defaultIcon}
             >
               <Popup>
                 <div className="min-w-44 space-y-1 text-sm">
@@ -117,7 +158,7 @@ export default function LeafletPropertyMap({
                   )}
                 </div>
               </Popup>
-            </CircleMarker>
+            </Marker>
           );
         })}
       </MapContainer>

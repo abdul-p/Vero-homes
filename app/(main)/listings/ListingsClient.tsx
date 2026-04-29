@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { List, MapPinned } from "lucide-react";
 import PropertyMap from "@/components/PropertyMap";
 import type { MapPoint } from "@/components/map-utils";
 
@@ -32,6 +33,7 @@ interface Listing {
 export default function ListingsClient() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showMap, setShowMap] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -123,7 +125,7 @@ export default function ListingsClient() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Filters */}
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -203,14 +205,48 @@ export default function ListingsClient() {
           </div>
         </form>
 
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-gray-500">
+            {loading
+              ? "Loading properties..."
+              : `${listings.length} ${
+                  listings.length === 1 ? "property" : "properties"
+                } found`}
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setShowMap((current) => !current)}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50"
+          >
+            {showMap ? (
+              <>
+                <List size={16} aria-hidden="true" />
+                Hide map
+              </>
+            ) : (
+              <>
+                <MapPinned size={16} aria-hidden="true" />
+                Show map
+              </>
+            )}
+          </button>
+        </div>
+
         {/* Results */}
         {loading ? (
           <div className="text-center py-20">Loading...</div>
         ) : listings.length === 0 ? (
           <div className="text-center py-20">No listings found</div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className={showMap ? "grid gap-6 lg:grid-cols-2" : ""}>
+            <div
+              className={
+                showMap
+                  ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"
+                  : "grid gap-6 md:grid-cols-2 xl:grid-cols-3"
+              }
+            >
               {listings.map((listing) => (
                 <Link
                   key={listing._id}
@@ -252,12 +288,14 @@ export default function ListingsClient() {
               ))}
             </div>
 
-            <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
-              <PropertyMap
-                points={mapPoints}
-                className="h-[420px] shadow lg:h-full"
-              />
-            </aside>
+            {showMap && (
+              <aside className="lg:sticky lg:top-24 lg:h-[calc(100vh-7rem)]">
+                <PropertyMap
+                  points={mapPoints}
+                  className="h-[420px] shadow lg:h-full"
+                />
+              </aside>
+            )}
           </div>
         )}
       </div>

@@ -15,14 +15,14 @@ export default function NavLinks({ setMenuOpen }: NavLinksProps) {
         Listings
       </Link>
       <Link
-        href="/buy"
+        href="/listings?type=sale"
         className="text-sm font-semibold text-gray-600 hover:text-lime-600 transition"
         onClick={() => setMenuOpen?.(false)}
       >
         Buy
       </Link>
       <Link
-        href="/rent"
+        href="/listings?type=rent"
         className="text-sm font-semibold text-gray-600 hover:text-lime-600 transition"
         onClick={() => setMenuOpen?.(false)}
       >

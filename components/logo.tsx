@@ -13,7 +13,7 @@ export default function Logo() {
     <Link
       href="/"
       style={{ transition: "opacity 1.2s ease-in-out" }}
-      className={`text-[2rem] font-bold cursor-pointer no-underline  [text-shadow:0px_4px_10px_rgba(0,0,0,0.5)] bg-gradient-to-r from-[var(--color-section-bg)] via-[var(--color-dark)] to-[var(--color-primary)] bg-clip-text text-transparent ${
+      className={`inline-flex h-12 items-center text-3xl font-extrabold leading-none cursor-pointer no-underline [text-shadow:0px_4px_10px_rgba(0,0,0,0.18)] bg-gradient-to-r from-lime-700 via-gray-900 to-lime-500 bg-clip-text text-transparent ${
         visible ? "opacity-100" : "opacity-0"
       }`}
     >

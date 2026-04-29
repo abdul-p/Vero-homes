@@ -12,8 +12,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-transparent shadow-sm sticky top-0 z-50 h-12 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-4 h-full py-4 flex items-center justify-between">
+    <nav className="bg-lime-50/80 shadow-sm sticky top-0 z-50 h-16 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
         {/* Logo */}
         <Logo />
         {/* Desktop Nav */}
