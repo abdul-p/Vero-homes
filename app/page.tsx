@@ -3,6 +3,7 @@ import { Suspense } from "react";
 
 import SearchBar from "@/components/SearchBar";
 import StatsSection from "@/components/StatsSection";
+import HomeStatsCounter from "@/components/HomeStatsCounter";
 import MapSection from "@/components/MapSection";
 import PropertiesSection from "@/components/PropertiesView";
 import CategoriesSection from "@/components/CategoriesSection";
@@ -28,21 +29,7 @@ export default function HomePage() {
         </div>
       </section>
       <StatsSection />
-      <section className="py-12 px-4 bg-gradient-to-br from-lime-400 to-lime-900">
-        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { label: "Properties Listed", value: "2,400+" },
-            { label: "Cities Covered", value: "3" },
-            { label: "Verified Agents", value: "180+" },
-            { label: "Happy Clients", value: "1,200+" },
-          ].map((stat) => (
-            <div key={stat.label}>
-              <p className="text-3xl font-bold text-lime-100">{stat.value}</p>
-              <p className="text-sm text-lime-100 mt-1">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <HomeStatsCounter />
       <MapSection />
       <section className="py-16 px-4 bg-gradient-to-br from-lime-200 to-lime-700 ">
         <div className="max-w-6xl mx-auto">
